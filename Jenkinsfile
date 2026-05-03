@@ -1,18 +1,17 @@
 pipeline {
-    agent any 
+    agent { label 'linux-slave' } // 'linux-slave' wahi naam hona chahiye jo apne Node settings me diya hai
 
     stages {
         stage('Checkout') {
             steps {
-                // Yahan 'main' branch specify karna zaroori hai
                 git branch: 'main', url: 'https://github.com/saurabhpaljhs-maker/devops-project-11.git'
             }
         }
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker Image...'
-                // sh command Linux ke liye hoti hai, agar Jenkins Windows par hai toh 'bat' use karein
+                echo 'Building Docker Image on Linux Slave...'
+                // Linux par 'sh' command hi chalegi
                 sh 'docker build -t devops-app-11:${BUILD_NUMBER} .'
             }
         }
