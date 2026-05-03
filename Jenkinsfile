@@ -1,16 +1,18 @@
 pipeline {
-    agent any // Abhi ke liye 'any' rakhte hain jab tak node connect na ho jaye
+    agent any 
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/saurabhpaljhs-maker/devops-project-11.git'
+                // Yahan 'main' branch specify karna zaroori hai
+                git branch: 'main', url: 'https://github.com/saurabhpaljhs-maker/devops-project-11.git'
             }
         }
 
         stage('Docker Build') {
             steps {
                 echo 'Building Docker Image...'
+                // sh command Linux ke liye hoti hai, agar Jenkins Windows par hai toh 'bat' use karein
                 sh 'docker build -t devops-app-11:${BUILD_NUMBER} .'
             }
         }
@@ -18,9 +20,7 @@ pipeline {
         stage('Container Deployment') {
             steps {
                 echo 'Deploying Container...'
-                // Purane container ko hatana agar koi chal raha ho
                 sh 'docker rm -f my-app-container || true'
-                // Naya container start karna
                 sh 'docker run -d --name my-app-container -p 80:3000 devops-app-11:${BUILD_NUMBER}'
             }
         }
