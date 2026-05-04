@@ -11,7 +11,7 @@ RUN npm install
 # Step 4: Copy source code
 COPY . .
 
-# Step 5: Port expose
+# Step 5: Port expose (sirf documentation ke liye)
 EXPOSE 3000
 
 # Step 6: Start the app
