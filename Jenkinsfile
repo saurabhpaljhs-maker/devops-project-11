@@ -17,7 +17,7 @@ pipeline {
         stage('Run Ramji Project Container') {
             steps {
                 // Ab port 80 par hamara naya container chalega
-                sh 'docker run -d --name ramji-web-container -p 8081:80 ramji-app-img'
+                sh 'docker run -d --name ramji-web-container -p 8081:3000 ramji-app-img'
                 echo "Bhai, Ramji Project-12 live ho gaya hai port 80 par!"
             }
         }
