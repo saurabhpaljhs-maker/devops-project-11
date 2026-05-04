@@ -4,21 +4,21 @@ pipeline {
     stages {
         stage('Cleanup Old Container') {
             steps {
-                // Purane sabhi containers (test-web aur ramji) ko saaf karo
-                sh 'docker rm -f test-web ramji-web-container || true'
+                // Purane containers ko saaf karo taaki conflict na ho
+                sh 'docker rm -f ramji-web-container test-web || true'
             }
         }
         stage('Build Docker Image') {
             steps {
-                // Nayi image ka naam bhi 'ramji-app-img' rakhte hain
+                // Nayi image build karo
                 sh 'docker build -t ramji-app-img .'
             }
         }
-        stage('Run Ramji Project Container') {
+        stage('Run Ramji Project') {
             steps {
-                // Ab port 80 par hamara naya container chalega
+                // Port 8081 (Bahar) -> Port 3000 (Andar Node.js app)
                 sh 'docker run -d --name ramji-web-container -p 8081:3000 ramji-app-img'
-                echo "Bhai, Ramji Project-12 live ho gaya hai port 80 par!"
+                echo "Bhai, Ramji Project port 8081 par live ho gaya hai!"
             }
         }
     }
