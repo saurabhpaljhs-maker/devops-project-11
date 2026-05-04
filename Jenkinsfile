@@ -4,20 +4,21 @@ pipeline {
     stages {
         stage('Cleanup Old Container') {
             steps {
-                // Pehle se chal rahe purane containers ko delete karne ke liye
-                sh 'docker rm -f balaji-web-container test-web || true'
+                // Purane containers ko delete karo
+                sh 'docker rm -f test-web balaji-web-container || true'
             }
         }
         stage('Build Docker Image') {
             steps {
+                // Nayi image banao Project-12 ki files ke sath
                 sh 'docker build -t balaji-app-img .'
             }
         }
-        stage('Run Fresh Container') {
+        stage('Run Project-12 Container') {
             steps {
-                // Naya container port 80 par chalayenge
+                // Ab port 80 par naya container chalega
                 sh 'docker run -d --name balaji-web-container -p 80:80 balaji-app-img'
-                echo "Bhai, Project-12 live ho gaya hai port 80 par!"
+                echo "Bhai, Project-12 ab live hai!"
             }
         }
     }
