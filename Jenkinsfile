@@ -1,26 +1,27 @@
 pipeline {
-    agent { label 'linux-slave' } // 'linux-slave' wahi naam hona chahiye jo apne Node settings me diya hai
+    agent { label 'project-12' }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/saurabhpaljhs-maker/devops-project-11.git'
+                git 'https://github.com/YOUR_USERNAME/balaji-app.git'
             }
         }
-
-        stage('Docker Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building Docker Image on Linux Slave...'
-                // Linux par 'sh' command hi chalegi
-                sh 'docker build -t devops-app-11:${BUILD_NUMBER} .'
+                sh 'docker build -t balaji-app-img .'
             }
         }
-
-        stage('Container Deployment') {
+        stage('Remove Old Container') {
             steps {
-                echo 'Deploying Container...'
-                sh 'docker rm -f my-app-container || true'
-                sh 'docker run -d --name my-app-container -p 80:3000 devops-app-11:${BUILD_NUMBER}'
+                // Agar pehle se koi container chal raha ho toh use delete karne ke liye
+                sh 'docker rm -f balaji-web-container || true'
+            }
+        }
+        stage('Run New Container') {
+            steps {
+                sh 'docker run -d --name balaji-web-container -p 80:80 balaji-app-img'
+                echo "Bhai, website live ho gayi hai port 80 par!"
             }
         }
     }
