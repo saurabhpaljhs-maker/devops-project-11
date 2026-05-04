@@ -2,9 +2,10 @@ pipeline {
     agent { label 'project-12' }
 
     stages {
-        stage('Checkout Code') {
+        stage('Cleanup Old Container') {
             steps {
-                git 'https://github.com/YOUR_USERNAME/balaji-app.git'
+                // Pehle se chal rahe purane containers ko delete karne ke liye
+                sh 'docker rm -f balaji-web-container test-web || true'
             }
         }
         stage('Build Docker Image') {
@@ -12,16 +13,11 @@ pipeline {
                 sh 'docker build -t balaji-app-img .'
             }
         }
-        stage('Remove Old Container') {
+        stage('Run Fresh Container') {
             steps {
-                // Agar pehle se koi container chal raha ho toh use delete karne ke liye
-                sh 'docker rm -f balaji-web-container || true'
-            }
-        }
-        stage('Run New Container') {
-            steps {
+                // Naya container port 80 par chalayenge
                 sh 'docker run -d --name balaji-web-container -p 80:80 balaji-app-img'
-                echo "Bhai, website live ho gayi hai port 80 par!"
+                echo "Bhai, Project-12 live ho gaya hai port 80 par!"
             }
         }
     }
